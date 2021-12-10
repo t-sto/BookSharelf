@@ -1,3 +1,8 @@
+<?php
+session_start();
+$_SESSION['id'] = array();  //セッションを初期化(ログアウト)
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -13,8 +18,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic"
-        rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
     <!-- SimpleLightbox plugin CSS-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
@@ -32,46 +36,25 @@
                     <hr class="divider" />
                 </div>
             </div>
-            <div class="form-floating mb-3">
-                <input class="form-control" id="name" type="text" placeholder="Enter your name..."
-                    data-sb-validations="required" />
-                <label for="name">UserName</label>
-                <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
-            </div>
-            <!-- Email address input-->
-            <div class="form-floating mb-3">
-                <input class="form-control" id="email" type="email" placeholder="name@example.com"
-                    data-sb-validations="required,email" />
-                <label for="email">Password</label>
-                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.
-                </div>
-                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
-            </div>
-            <!-- Phone number input-->
 
-            <!-- Submit success message-->
-            <!---->
-            <!-- This is what your users will see when the form-->
-            <!-- has successfully submitted-->
-            <div class="d-none" id="submitSuccessMessage">
-                <div class="text-center mb-3">
-                    <div class="fw-bolder">Form submission successful!</div>
-                    To activate this form, sign up at
-                    <br />
-                    <a
-                        href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+            <!-- エラーメッセージの表示 -->
+            <?php
+            // echo $_SESSION['error_message'];
+            // $_SESSION['error_message'] = "";  //初期化
+            ?>
+
+            <form action="../assets/php/login.php" method="post" name="Login_Form" class="form-signin">
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="UserName" name="UserName" type="text" data-sb-validations="required" />
+                    <label for="name">UserName</label>
                 </div>
-            </div>
-            <!-- Submit error message-->
-            <!---->
-            <!-- This is what your users will see when there is-->
-            <!-- an error submitting the form-->
-            <div class="d-none" id="submitErrorMessage">
-                <div class="text-center text-danger mb-3">Error sending message!</div>
-            </div>
-            <!-- Submit Button-->
-            <div class="d-grid"><button class="btn btn-primary btn-xl disabled" id="submitButton"
-                    type="submit">ログイン</button></div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="Password" name="Password" type="password" data-sb-validations="required,password" />
+                    <label for="email">Password</label>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-primary btn-xl" id="submitButton" type="submit">ログイン</button>
+                </div>
             </form>
         </div>
         </div>
