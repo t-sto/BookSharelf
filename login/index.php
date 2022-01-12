@@ -1,6 +1,6 @@
 <?php
 session_start();
-$_SESSION['id'] = array();  //セッションを初期化(ログアウト)
+$_SESSION['bs_account_id'] = array();  //セッションを初期化(ログアウト)
 ?>
 
 <!DOCTYPE html>
