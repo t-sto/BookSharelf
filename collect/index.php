@@ -1,3 +1,7 @@
+<?php
+require("../assets/php/login_check.php");
+?>
+
 <!doctype html>
 <html lang="ja">
 
