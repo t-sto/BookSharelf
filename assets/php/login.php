@@ -27,7 +27,7 @@ if (!isset($row['account_id'])) {
 	header("location: ../../login"); //ログインページへリダイレクト
 	exit();
   }else{
-	$_SESSION['id'] = $row['account_id'];	//セッションにIDを代入
+	$_SESSION['bs_account_id'] = $row['account_id'];	//セッションにIDを代入
 	header("location: ../../collect"); //管理者ページへリダイレクト
 	exit();
   }
