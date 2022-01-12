@@ -28,10 +28,10 @@ function make_list($row)  //1集荷先の情報を代入
 
   //リスト生成
   $date = date_create($row["collect_date"]);
-  echo '<tbody> <tr> <td>' . date_format($date, 'Y') . "年" . date_format($date, 'm') . "月" . date_format($date, 'd') . "日" .  '</td>'
-    . '<td>' . $userInfo["user_address"] . '</td>'
-    . '<td>' . $userInfo["user_number"] . '</td>';
-  echo '<td>';
+  echo '<tbody> <tr> <td> <a style="width:100%; height:100%; display:block;" href="collect_detail.php?id=' . $row["collect_id"] . '">' . date_format($date, 'Y') . "年" . date_format($date, 'm') . "月" . date_format($date, 'd') . "日" .  '</a> </td>'
+    . '<td> <a style="width:100%; height:100%; display:block;" href="collect_detail.php?id=' . $row["collect_id"] . '">' . $userInfo["user_address"] . '</a> </td>'
+    . '<td> <a style="width:100%; height:100%; display:block;" href="collect_detail.php?id=' . $row["collect_id"] . '">' . $userInfo["user_number"] . '</a> </td>';
+  echo '<td> <a style="width:100%; height:100%; display:block;" href="collect_detail.php?id=' . $row["collect_id"] . '">';
   switch ($row["collect_executedflag"]) { //集荷状況を取得して表示
     case 1:
       echo "未確認";
@@ -43,7 +43,7 @@ function make_list($row)  //1集荷先の情報を代入
       echo "集荷完了";
       break;
   }
-  echo '</td> </tr> </tbody>';
+  echo '</a> </td> </tr> </tbody>';
 }
 ?>
 
