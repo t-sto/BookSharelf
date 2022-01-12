@@ -1,3 +1,44 @@
+<?php
+require_once('../assets/php/db_config.php');
+require("../assets/php/login_check.php");
+
+//表生成
+function make_list()
+{
+  //URL内クエリ文字の集荷IDからDB内の集荷詳細データを取得
+  try {
+    $pdo = new PDO(DSN, DB_USER, DB_PASS);
+    $stmt = $pdo->prepare('select * from CollectDestinationTable, UserInfoTable where CollectDestinationTable.user_id = UserInfoTable.user_id and collect_id = :id');
+    $stmt->bindValue(':id', $_GET["id"]);
+    $stmt->execute();
+    $collect_data = $stmt->fetch();
+  } catch (Exception $e) {
+    echo $e->getMessage() . PHP_EOL;
+  }
+
+  $date = date_create($collect_data["collect_date"]);
+  echo '<tbody> <tr> <th scope="row">日付</th> <td>' . date_format($date, 'Y') . "年" . date_format($date, 'm') . "月" . date_format($date, 'd') . "日" . '</td> </tr>'
+    . '<tr> <th scope="row">住所</th> <td>' . $collect_data["user_address"] . '</td> </tr>'
+    . '<tr> <th scope="row">電話番号</th> <td>' . $collect_data["user_number"] . '</td> </tr>'
+    . '<tr> <th scope="row">集荷状況</th> <td>';
+  switch ($collect_data["collect_executedflag"]) { //集荷状況を取得して表示
+    case 1:
+      echo "未確認";
+      break;
+    case 2:
+      echo "確認済み";
+      break;
+    case 3:
+      echo "集荷完了";
+      break;
+  }
+  echo '</td> </tr>';
+  echo '<tr> <th scope="row">メッセージ</th> <td>' . $collect_data["collect_message"] . '</td> </tr>'
+    . '<tr> <th scope="row">メールアドレス</th> <td>' . $collect_data["user_mail"] . '</td> </tr>'
+    . '<tr> <th scope="row">名前</th> <td>' . $collect_data["user_name"] . '</td> </tr> </tbody>';
+}
+?>
+
 <!doctype html>
 <html lang="ja">
 
@@ -9,8 +50,7 @@
   <title>
     BS Admin -集荷先詳細情報-
   </title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
-    name='viewport' />
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
@@ -72,50 +112,12 @@
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
-                  <tbody>
-                    <tr>
-                      <th scope="row">日付</th>
-                      <td>
-                        2025年5月25日
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">住所</th>
-                      <td>
-                        福島県郡山市
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">電話番号</th>
-                      <td>
-                        12345678912311
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">集荷状況</th>
-                      <td>
-                        集荷済み
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">メッセージ</th>
-                      <td>
-                        午前中に集荷を希望
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">メールアドレス</th>
-                      <td>
-                        1aaa@example.com
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">名前</th>
-                      <td>
-                        Tanaka Masahiro
-                      </td>
-                    </tr>
-                  </tbody>
+
+                    <?php
+                    //表示用コード自動生成実行
+                    make_list();  //表生成
+                    ?>
+
                 </table>
                 <input type="submit" class="btn btn-primary" value="連絡済み">
                 <input type="submit" class="btn btn-primary" value="集荷完了">
