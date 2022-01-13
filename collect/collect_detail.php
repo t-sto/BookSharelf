@@ -26,7 +26,7 @@ function make_list()
       echo "未確認";
       break;
     case 2:
-      echo "確認済み";
+      echo "連絡済み";
       break;
     case 3:
       echo "集荷完了";
@@ -36,6 +36,8 @@ function make_list()
   echo '<tr> <th scope="row">メッセージ</th> <td>' . $collect_data["collect_message"] . '</td> </tr>'
     . '<tr> <th scope="row">メールアドレス</th> <td>' . $collect_data["user_mail"] . '</td> </tr>'
     . '<tr> <th scope="row">名前</th> <td>' . $collect_data["user_name"] . '</td> </tr> </tbody>';
+
+  $_SESSION['bs_collect_id'] = $_GET["id"]; //集荷状況更新･削除用IDをセッションに保存
 }
 ?>
 
@@ -59,6 +61,26 @@ function make_list()
   <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/demo/demo.css" rel="stylesheet" />
+
+  <script language="javascript" type="text/javascript">
+    //連絡済みボタン押下時
+    function Contacted() {
+      window.location.href = "collect_contacted.php"; //連絡済み更新処理ページへリダイレクト
+    }
+
+    //集荷完了ボタン押下時
+    function Collected() {
+      window.location.href = "collect_collected.php"; //集荷完了更新処理ページへリダイレクト
+    }
+
+    //削除ボタン押下時
+    function DeleteCheck() {
+      if (confirm("削除を実行します")) { //アラートを表示し、OKがクリックされた場合
+        window.location.href = "collect_delete.php"; //集荷情報･ユーザー情報削除処理ページへリダイレクト
+      }
+    }
+  </script>
+
 </head>
 
 <body class="">
@@ -119,9 +141,9 @@ function make_list()
                     ?>
 
                 </table>
-                <input type="submit" class="btn btn-primary" value="連絡済み">
-                <input type="submit" class="btn btn-primary" value="集荷完了">
-                <input type="button" class="btn btn-danger" value="削除">
+                <input type="submit" class="btn btn-primary" value="連絡済み" onclick="Contacted();">
+                <input type="submit" class="btn btn-primary" value="集荷完了" onclick="Collected();">
+                <input type="button" class="btn btn-danger" value="削除" onclick="DeleteCheck();">
               </div>
             </div>
           </div>

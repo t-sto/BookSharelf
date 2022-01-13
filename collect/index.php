@@ -37,7 +37,7 @@ function make_list($row)  //1集荷先の情報を代入
       echo "未確認";
       break;
     case 2:
-      echo "確認済み";
+      echo "連絡済み";
       break;
     case 3:
       echo "集荷完了";
