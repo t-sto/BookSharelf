@@ -43,7 +43,7 @@ $_SESSION['bs_account_id'] = array();  //セッションを初期化(ログア�
             // $_SESSION['error_message'] = "";  //初期化
             ?>
 
-            <form action="../assets/php/login.php" method="post" name="Login_Form" class="form-signin">
+            <form action="login.php" method="post" name="Login_Form" class="form-signin">
                 <div class="form-floating mb-3">
                     <input class="form-control" id="UserName" name="UserName" type="text" data-sb-validations="required" />
                     <label for="name">UserName</label>
@@ -56,8 +56,6 @@ $_SESSION['bs_account_id'] = array();  //セッションを初期化(ログア�
                     <button class="btn btn-primary btn-xl" id="submitButton" type="submit">ログイン</button>
                 </div>
             </form>
-        </div>
-        </div>
         </div>
     </section>
     <!-- Footer-->

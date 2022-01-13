@@ -1,11 +1,11 @@
 <?php
-require_once('db_config.php');
+require_once('../assets/php/db_config.php');
 session_start();
 
 //ログイン名とパスワードの入力値を取得して空ではないかチェック
 if (empty($_POST["UserName"]) or empty($_POST["Password"])) { //ログイン名とパスワードのどちらかが入力されていない場合
 	$_SESSION['error_message'] = "再入力してください";
-	header("location: ../../login"); //ログインページへリダイレクト
+	header("location: ./"); //ログインページへリダイレクト
 	exit();
 }
 
@@ -24,11 +24,11 @@ try {
 //合致するアカウントがあるか
 if (!isset($row['account_id'])) {
 	$_SESSION['error_message'] = "ユーザーネームかパスワードが間違っています";
-	header("location: ../../login"); //ログインページへリダイレクト
+	header("location: ./"); //ログインページへリダイレクト
 	exit();
   }else{
 	$_SESSION['bs_account_id'] = $row['account_id'];	//セッションにIDを代入
-	header("location: ../../collect"); //管理者ページへリダイレクト
+	header("location: ../collect"); //管理者ページへリダイレクト
 	exit();
   }
 ?>
