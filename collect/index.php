@@ -2,10 +2,16 @@
 require_once('../assets/php/db_config.php');
 require("../assets/php/login_check.php");
 
-//DB内の集荷データを取得
+//DBから集荷情報を取得
 try {
   $pdo = new PDO(DSN, DB_USER, DB_PASS);
-  $stmt = $pdo->prepare('select * from CollectDestinationTable');
+  //絞り込みが指定されている場合
+  if (!empty($_GET["search"])) {
+    $stmt = $pdo->prepare('select * from CollectDestinationTable where collect_executedflag = :flag');
+    $stmt->bindValue(':flag', $_GET["search"]);
+  } else {  //絞り込みが指定されていない場合
+    $stmt = $pdo->prepare('select * from CollectDestinationTable');
+  }
   $stmt->execute();
   $collectDestination = $stmt->fetchAll();
 } catch (Exception $e) {
@@ -121,9 +127,10 @@ function make_list($row)  //1集荷先の情報を代入
                   絞り込み
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">未確認</a>
-                  <a class="dropdown-item" href="#">連絡済み</a>
-                  <a class="dropdown-item" href="#">集荷完了</a>
+                  <a class="dropdown-item" href="./">すべて</a>
+                  <a class="dropdown-item" href="?search=1">未確認</a>
+                  <a class="dropdown-item" href="?search=2">連絡済み</a>
+                  <a class="dropdown-item" href="?search=3">集荷完了</a>
                 </div>
               </div>
               <br>
