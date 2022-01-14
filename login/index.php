@@ -39,8 +39,10 @@ $_SESSION['bs_account_id'] = array();  //セッションを初期化(ログア�
 
             <!-- エラーメッセージの表示 -->
             <?php
-            // echo $_SESSION['error_message'];
-            // $_SESSION['error_message'] = "";  //初期化
+            if (!empty($_SESSION['error_message'])) {
+                echo $_SESSION['error_message'];
+                $_SESSION['error_message'] = "";  //初期化
+            }
             ?>
 
             <form action="login.php" method="post" name="Login_Form" class="form-signin">
