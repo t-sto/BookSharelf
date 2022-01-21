@@ -1,3 +1,47 @@
+<?php
+require_once('../assets/php/db_config.php');
+require("../assets/php/login_check.php");
+
+//表生成
+function make_list()
+{
+  //URL内クエリ文字の発送IDからDB内の発送詳細データを取得
+  try {
+    $pdo = new PDO(DSN, DB_USER, DB_PASS);
+    $stmt = $pdo->prepare('select * from ShippingAddressTable, UserInfoTable where ShippingAddressTable.user_id = UserInfoTable.user_id and shipping_id = :id');
+    $stmt->bindValue(':id', $_GET["id"]);
+    $stmt->execute();
+    $collect_data = $stmt->fetch();
+  } catch (Exception $e) {
+    echo $e->getMessage() . PHP_EOL;
+  }
+
+  $date = date_create($collect_data["shipping_date"]);
+  echo '<tbody> <tr> <th scope="row">日付</th> <td>' . date_format($date, 'Y') . "年" . date_format($date, 'm') . "月" . date_format($date, 'd') . "日" . '</td> </tr>'
+    . '<tr> <th scope="row">住所</th> <td>' . $collect_data["user_address"] . '</td> </tr>'
+    . '<tr> <th scope="row">電話番号</th> <td>' . $collect_data["user_number"] . '</td> </tr>'
+    . '<tr> <th scope="row">集荷状況</th> <td>';
+  switch ($collect_data["shipping_executedflag"]) { //発送状況を取得して表示
+    case 1:
+      echo "未発送";
+      break;
+    case 2:
+      echo "発送中";
+      break;
+    case 3:
+      echo "発送済み";
+      break;
+  }
+  echo '</td> </tr>';
+  echo '<tr> <th scope="row">メッセージ</th> <td>' . $collect_data["shipping_message"] . '</td> </tr>'
+    . '<tr> <th scope="row">メールアドレス</th> <td>' . $collect_data["user_mail"] . '</td> </tr>'
+    . '<tr> <th scope="row">名前</th> <td>' . $collect_data["user_name"] . '</td> </tr> </tbody>';
+
+  $_SESSION['bs_shipping_id'] = $_GET["id"]; //発送状況更新･削除用IDをセッションに保存
+}
+
+?>
+
 <!doctype html>
 <html lang="ja">
 
@@ -9,8 +53,7 @@
   <title>
     BS Admin -発送先詳細情報-
   </title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
-    name='viewport' />
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
@@ -19,6 +62,26 @@
   <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/demo/demo.css" rel="stylesheet" />
+
+  <script language="javascript" type="text/javascript">
+    //発送中ボタン押下時
+    function Transit() {
+      window.location.href = "shipping_transit.php"; //発送中更新処理ページへリダイレクト
+    }
+
+    //発送済みボタン押下時
+    function Shipped() {
+      window.location.href = "shipping_shipped.php"; //発送済み更新処理ページへリダイレクト
+    }
+
+    //削除ボタン押下時
+    function DeleteCheck() {
+      if (confirm("削除を実行します")) { //アラートを表示し、OKがクリックされた場合
+        window.location.href = "shipping_delete.php"; //発送情報･ユーザー情報削除処理ページへリダイレクト
+      }
+    }
+  </script>
+
 </head>
 
 <body class="">
@@ -72,54 +135,16 @@
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
-                  <tbody>
-                    <tr>
-                      <th scope="row">日付</th>
-                      <td>
-                        2025年5月25日
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">住所</th>
-                      <td>
-                        福島県郡山市
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">電話番号</th>
-                      <td>
-                        12345678912311
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">集荷状況</th>
-                      <td>
-                        配送中
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">メッセージ</th>
-                      <td>
-                        午前中に配達を希望
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">メールアドレス</th>
-                      <td>
-                        1aaa@example.com
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">名前</th>
-                      <td>
-                        Tanaka Masahiro
-                      </td>
-                    </tr>
-                  </tbody>
+
+                    <?php
+                    //表示用コード自動生成実行
+                    make_list();  //表生成
+                    ?>
+
                 </table>
-                <input type="submit" class="btn btn-primary" value="配送中">
-                <input type="submit" class="btn btn-primary" value="配送完了">
-                <input type="button" class="btn btn-danger" value="削除">
+                <input type="submit" class="btn btn-primary" value="発送中" onclick="Transit();">
+                <input type="submit" class="btn btn-primary" value="発送済み" onclick="Shipped();">
+                <input type="button" class="btn btn-danger" value="削除" onclick="DeleteCheck();">
               </div>
             </div>
           </div>
