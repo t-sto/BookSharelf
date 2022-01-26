@@ -13,7 +13,7 @@ $_SESSION['bs_account_id'] = array();  //セッションを初期化(ログア�
     <meta name="author" content="" />
     <title>BS Admin -login-</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="../assets/img/icon.ico" />
     <!-- Bootstrap Icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Google fonts-->
