@@ -16,28 +16,34 @@ function make_list()
     echo $e->getMessage() . PHP_EOL;
   }
 
-  $date = date_create($collect_data["collect_date"]);
-  echo '<tbody> <tr> <th scope="row">日付</th> <td>' . date_format($date, 'Y') . "年" . date_format($date, 'm') . "月" . date_format($date, 'd') . "日" . '</td> </tr>'
-    . '<tr> <th scope="row">住所</th> <td>' . $collect_data["user_address"] . '</td> </tr>'
-    . '<tr> <th scope="row">電話番号</th> <td>' . $collect_data["user_number"] . '</td> </tr>'
-    . '<tr> <th scope="row">集荷状況</th> <td>';
-  switch ($collect_data["collect_executedflag"]) { //集荷状況を取得して表示
-    case 1:
-      echo "未確認";
-      break;
-    case 2:
-      echo "連絡済み";
-      break;
-    case 3:
-      echo "集荷完了";
-      break;
-  }
-  echo '</td> </tr>';
-  echo '<tr> <th scope="row">メッセージ</th> <td>' . $collect_data["collect_message"] . '</td> </tr>'
-    . '<tr> <th scope="row">メールアドレス</th> <td>' . $collect_data["user_mail"] . '</td> </tr>'
-    . '<tr> <th scope="row">名前</th> <td>' . $collect_data["user_name"] . '</td> </tr> </tbody>';
+  //存在しているIDの場合
+  if (isset($collect_data["collect_executedflag"])) {
+    $date = date_create($collect_data["collect_date"]);
+    echo '<tbody> <tr> <th scope="row">日付</th> <td>' . date_format($date, 'Y') . "年" . date_format($date, 'm') . "月" . date_format($date, 'd') . "日" . '</td> </tr>'
+      . '<tr> <th scope="row">住所</th> <td>' . $collect_data["user_address"] . '</td> </tr>'
+      . '<tr> <th scope="row">電話番号</th> <td>' . $collect_data["user_number"] . '</td> </tr>'
+      . '<tr> <th scope="row">集荷状況</th> <td>';
+    switch ($collect_data["collect_executedflag"]) { //集荷状況を取得して表示
+      case 1:
+        echo "未確認";
+        break;
+      case 2:
+        echo "連絡済み";
+        break;
+      case 3:
+        echo "集荷完了";
+        break;
+    }
+    echo '</td> </tr>';
+    echo '<tr> <th scope="row">メッセージ</th> <td>' . $collect_data["collect_message"] . '</td> </tr>'
+      . '<tr> <th scope="row">メールアドレス</th> <td>' . $collect_data["user_mail"] . '</td> </tr>'
+      . '<tr> <th scope="row">名前</th> <td>' . $collect_data["user_name"] . '</td> </tr> </tbody>';
 
-  $_SESSION['bs_collect_id'] = $_GET["id"]; //集荷状況更新･削除用IDをセッションに保存
+    $_SESSION['bs_collect_id'] = $_GET["id"]; //集荷状況更新･削除用IDをセッションに保存
+  } else {  //存在していないIDの場合
+    header("location: ../login"); //ログインページへリダイレクト
+    exit();
+  }
 }
 ?>
 
